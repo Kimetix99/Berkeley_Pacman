@@ -96,36 +96,65 @@ def uniformCostSearch(problem):
                     fringe.append(ns)
                     generated[ns.state]=[ns, 'F']
                 elif ns.state in generated and generated[ns.state][1] == 'F' and ns.path_cost < generated[ns.state][0].path_cost:
-                    index=0
-                    while not ns.equals(fringe[index]):
-                        index+=1
-                    fringe[index]=ns
+                    fringe.insert(0,ns)
                     generated[ns.state] = [ns, 'F']
 
 
-
-def manhattanHeuristic(position, problem):
-
+def manhattanHeuristic(position, problem, info={}):
+    "The Manhattan distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
-def euclideanHeuristic(position, problem):
-
+def euclideanHeuristic(position, problem, info={}):
+    "The Euclidean distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
+def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
+    n=Node(None,None,0,problem.getStartState())
+    fringe=[n]
+    generated = { n.state : [n, 'F'] }
+    while True:
+        if len(fringe)==0:
+            print "No s'ha trobat solucio"
+            sys.exit()
+        n = fringe.pop(0)
+        if generated[n.state][1]!='E':
+            if problem.isGoalState(n.state):
+                return n.path()
+            generated[n.state]=[n, 'E']
+            for state, action, cost in problem.getSuccessors(n.state):
+                ns=Node(n,action,cost,state)
+                if ns.state not in generated:
+                    fringe.append(ns)
+                    generated[ns.state]=[ns,'F']
+                elif ns.state in generated and generated[ns.state][1] == 'F' and heuristic(ns.state, problem) < heuristic(generated[ns.state][0].state,problem):
+                    fringe.insert(0,ns)
+                    generated[ns.state] = [ns, 'F']
 
-
-def greedyBestFirstSearch(problem, heuristic=manhattanHeuristic):
-    
-    
-
-def aStarSearch(problem, heuristic=manhattanHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+def aStarSearch(problem, heuristic=nullHeuristic):
+    n=Node(None,None,0,problem.getStartState())
+    fringe=[n]
+    generated = { n.state : [n, 'F'] }
+    while True:
+        if len(fringe)==0:
+            print "No s'ha trobat solucio"
+            sys.exit()
+        n = fringe.pop(0)
+        if generated[n.state][1]!='E':
+            if problem.isGoalState(n.state):
+                return n.path()
+            generated[n.state]=[n, 'E']
+            for state, action, cost in problem.getSuccessors(n.state):
+                ns=Node(n,action,cost,state)
+                if ns.state not in generated:
+                    fringe.append(ns)
+                    generated[ns.state]=[ns,'F']
+                elif ns.state in generated and generated[ns.state][1] == 'F' and (ns.path_cost+heuristic(ns.state, problem)) < (generated[ns.state][0].path_cost+heuristic(generated[ns.state][0].state,problem)):
+                    fringe.insert(0,ns)
+                    generated[ns.state] = [ns, 'F']
 
 def bidirectionalSearch(problem):
     "*** YOUR CODE HERE ***"
@@ -136,3 +165,5 @@ ucs = uniformCostSearch
 bfsh = greedyBestFirstSearch
 astar = aStarSearch
 bds = bidirectionalSearch
+mandH = manhattanHeuristic
+eucdH = euclideanHeuristic
