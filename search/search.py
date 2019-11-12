@@ -17,9 +17,11 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
+import math
 import util
 from Node import *
 import sys
+import numpy as np
 
 class SearchProblem:
     """
@@ -79,13 +81,14 @@ def nullHeuristic(state, problem=None):
 
 def uniformCostSearch(problem):
     n=Node(None,None,0,problem.getStartState())
-    fringe=[n]
+    fringe = util.PriorityQueue()
+    fringe.push(n,n.path_cost)
     generated = { n.state : [n,'F'] }
     while True:
-        if len(fringe) == 0:
+        if fringe.isEmpty():
             print "No s'ha trobat solucio"
             sys.exit()
-        n = fringe.pop(0)
+        n = fringe.pop()
         if generated[n.state][1] != 'E':
             if problem.isGoalState(n.state):
                 return n.path()
@@ -93,10 +96,10 @@ def uniformCostSearch(problem):
             for state, action, cost in problem.getSuccessors(n.state):
                 ns = Node(n, action, cost, state)
                 if ns.state not in generated: 
-                    fringe.append(ns)
+                    fringe.push(ns,ns.path_cost)
                     generated[ns.state]=[ns, 'F']
                 elif ns.state in generated and generated[ns.state][1] == 'F' and ns.path_cost < generated[ns.state][0].path_cost:
-                    fringe.insert(0,ns)
+                    fringe.push(ns,ns.path_cost)
                     generated[ns.state] = [ns, 'F']
 
 
@@ -112,15 +115,38 @@ def euclideanHeuristic(position, problem, info={}):
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
+def moovingFoodDirection(position, problem, info={}):  
+    xy1 = position
+    xy2 = problem.goal
+    closerNorth=False
+    closerSouth=False
+    closerEast=False
+    closerWest=False
+    for state, action, cost in problem.getSuccessors(xy1): 
+        if action=='North' and state[0]+state[1] <= xy1[0]+xy1[1]:
+            closerNorth=True
+        if action=='South' and state[0]+state[1] <= xy1[0]+xy1[1]:
+            closerSouth=True
+        if action=='East' and state[0]+state[1] <= xy1[0]+xy1[1]:
+            closerEast=True
+        if action=='West' and state[0]+state[1] <= xy1[0]+xy1[1]:
+            closerWest=True
+
+    if closerNorth or closerSouth or closerEast or closerWest:
+        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+    else:
+        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])+1
+
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     n=Node(None,None,0,problem.getStartState())
-    fringe=[n]
+    fringe = util.PriorityQueue()
+    fringe.push(n,heuristic(n.state, problem))
     generated = { n.state : [n, 'F'] }
     while True:
-        if len(fringe)==0:
+        if fringe.isEmpty():
             print "No s'ha trobat solucio"
             sys.exit()
-        n = fringe.pop(0)
+        n = fringe.pop()
         if generated[n.state][1]!='E':
             if problem.isGoalState(n.state):
                 return n.path()
@@ -128,21 +154,22 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
             for state, action, cost in problem.getSuccessors(n.state):
                 ns=Node(n,action,cost,state)
                 if ns.state not in generated:
-                    fringe.append(ns)
+                    fringe.push(ns,heuristic(n.state, problem))
                     generated[ns.state]=[ns,'F']
-                elif ns.state in generated and generated[ns.state][1] == 'F' and heuristic(ns.state, problem) < heuristic(generated[ns.state][0].state,problem):
-                    fringe.insert(0,ns)
+                elif ns.state in generated and generated[ns.state][1] == 'F' and heuristic(ns.state, problem) < heuristic(generated[ns.state][0].state, problem):
+                    fringe.push(ns,heuristic(ns.state, problem))
                     generated[ns.state] = [ns, 'F']
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     n=Node(None,None,0,problem.getStartState())
-    fringe=[n]
+    fringe = util.PriorityQueue()
+    fringe.push(n,heuristic(n.state, problem))
     generated = { n.state : [n, 'F'] }
     while True:
-        if len(fringe)==0:
+        if fringe.isEmpty():
             print "No s'ha trobat solucio"
             sys.exit()
-        n = fringe.pop(0)
+        n = fringe.pop()
         if generated[n.state][1]!='E':
             if problem.isGoalState(n.state):
                 return n.path()
@@ -150,15 +177,53 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for state, action, cost in problem.getSuccessors(n.state):
                 ns=Node(n,action,cost,state)
                 if ns.state not in generated:
-                    fringe.append(ns)
+                    fringe.push(ns,heuristic(n.state, problem)+ns.path_cost)
                     generated[ns.state]=[ns,'F']
                 elif ns.state in generated and generated[ns.state][1] == 'F' and (ns.path_cost+heuristic(ns.state, problem)) < (generated[ns.state][0].path_cost+heuristic(generated[ns.state][0].state,problem)):
-                    fringe.insert(0,ns)
+                    fringe.push(ns,heuristic(ns.state, problem)+ns.path_cost)
                     generated[ns.state] = [ns, 'F']
 
 def bidirectionalSearch(problem):
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    n1=Node(None,None,0,problem.getStartState())
+    n2=Node(None,None,0,problem.goal)
+    fringe1=[n1]
+    fringe2=[n2]
+    generated1 = { n1.state : [n1,'F'] }
+    generated2 = { n2.state : [n2,'F'] }
+    while True:
+        if len(fringe1) == 0 or len(fringe2) == 0:
+            print "No s'ha trobat solucio"
+            sys.exit()
+        for i in fringe1:
+            for j in fringe2:
+                if i.state==j.state:
+                    fromGoalList=np.asarray(j.path())
+                    fromGoalList=reversed(fromGoalList)
+                    return i.path()+list(fromGoalList)
+        n1 = fringe1.pop(0)
+        n2 = fringe2.pop(0)
+        generated1[n1.state] = [n1, 'E']
+        generated2[n2.state] = [n2, 'E']
+        for state, action, cost in problem.getSuccessors(n1.state):
+            ns = Node(n1, action, cost, state)
+            if ns.state not in generated1: 
+                fringe1.append(ns)
+                generated1[ns.state]=[ns, 'F']
+        for state, action, cost in problem.getSuccessors(n2.state):
+            ns = Node(n2, anthagonicAction(action), cost, state)
+            if ns.state not in generated2: 
+                fringe2.append(ns)
+                generated2[ns.state]=[ns, 'F']
+
+def anthagonicAction(action):
+    if action=='North':
+        return 'South'
+    if action=='East':
+        return 'West'
+    if action=='West':
+        return 'East'
+    if action=='South':
+        return 'North'
 
 # Abbreviations
 ucs = uniformCostSearch
@@ -167,3 +232,4 @@ astar = aStarSearch
 bds = bidirectionalSearch
 mandH = manhattanHeuristic
 eucdH = euclideanHeuristic
+custH = moovingFoodDirection
