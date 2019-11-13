@@ -123,19 +123,25 @@ def moovingFoodDirection(position, problem, info={}):
     closerEast=False
     closerWest=False
     for state, action, cost in problem.getSuccessors(xy1): 
-        if action=='North' and state[0]+state[1] <= xy1[0]+xy1[1]:
+        if action=='North' and state[0]+state[1] > xy1[0]+xy1[1]:
             closerNorth=True
-        if action=='South' and state[0]+state[1] <= xy1[0]+xy1[1]:
+        if action=='South' and state[0]+state[1] > xy1[0]+xy1[1]:
             closerSouth=True
-        if action=='East' and state[0]+state[1] <= xy1[0]+xy1[1]:
+        if action=='East' and state[0]+state[1] > xy1[0]+xy1[1]:
             closerEast=True
-        if action=='West' and state[0]+state[1] <= xy1[0]+xy1[1]:
+        if action=='West' and state[0]+state[1] > xy1[0]+xy1[1]:
             closerWest=True
 
     if closerNorth or closerSouth or closerEast or closerWest:
-        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]) + 1
     else:
-        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])+1
+        print state
+        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+
+def xAxis(position, problem, info={}):  
+    xy1 = position
+    xy2 = problem.goal
+    return abs(xy1[0] - xy2[0])
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     n=Node(None,None,0,problem.getStartState())
@@ -232,4 +238,4 @@ astar = aStarSearch
 bds = bidirectionalSearch
 mandH = manhattanHeuristic
 eucdH = euclideanHeuristic
-custH = moovingFoodDirection
+custH = xAxis
