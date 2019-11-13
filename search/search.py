@@ -115,29 +115,6 @@ def euclideanHeuristic(position, problem, info={}):
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
-def moovingFoodDirection(position, problem, info={}):  
-    xy1 = position
-    xy2 = problem.goal
-    closerNorth=False
-    closerSouth=False
-    closerEast=False
-    closerWest=False
-    for state, action, cost in problem.getSuccessors(xy1): 
-        if action=='North' and state[0]+state[1] > xy1[0]+xy1[1]:
-            closerNorth=True
-        if action=='South' and state[0]+state[1] > xy1[0]+xy1[1]:
-            closerSouth=True
-        if action=='East' and state[0]+state[1] > xy1[0]+xy1[1]:
-            closerEast=True
-        if action=='West' and state[0]+state[1] > xy1[0]+xy1[1]:
-            closerWest=True
-
-    if closerNorth or closerSouth or closerEast or closerWest:
-        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]) + 1
-    else:
-        print state
-        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
-
 def xAxis(position, problem, info={}):  
     xy1 = position
     xy2 = problem.goal
@@ -201,9 +178,8 @@ def bidirectionalSearch(problem):
             print "No s'ha trobat solucio"
             sys.exit()
         for i in fringe1:
-            for j in fringe2:
-                if i.state==j.state:
-                    fromGoalList=np.asarray(j.path())
+                if i.state in generated2:
+                    fromGoalList=np.asarray(generated2[i.state][0].path())
                     fromGoalList=reversed(fromGoalList)
                     return i.path()+list(fromGoalList)
         n1 = fringe1.pop(0)
