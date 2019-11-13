@@ -115,7 +115,7 @@ def euclideanHeuristic(position, problem, info={}):
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
-def xAxis(position, problem, info={}):  
+def xAxe(position, problem, info={}):  
     xy1 = position
     xy2 = problem.goal
     return abs(xy1[0] - xy2[0])
@@ -214,4 +214,4 @@ astar = aStarSearch
 bds = bidirectionalSearch
 mandH = manhattanHeuristic
 eucdH = euclideanHeuristic
-custH = xAxis
+custH = xAxe
