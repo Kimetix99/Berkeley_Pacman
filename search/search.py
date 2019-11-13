@@ -146,7 +146,7 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 def aStarSearch(problem, heuristic=nullHeuristic):
     n=Node(None,None,0,problem.getStartState())
     fringe = util.PriorityQueue()
-    fringe.push(n,heuristic(n.state, problem))
+    fringe.push(n,heuristic(n.state, problem)+n.path_cost)
     generated = { n.state : [n, 'F'] }
     while True:
         if fringe.isEmpty():
@@ -178,10 +178,10 @@ def bidirectionalSearch(problem):
             print "No s'ha trobat solucio"
             sys.exit()
         for i in fringe1:
-                if i.state in generated2:
-                    fromGoalList=np.asarray(generated2[i.state][0].path())
-                    fromGoalList=reversed(fromGoalList)
-                    return i.path()+list(fromGoalList)
+            if i.state in generated2:
+                fromGoalList=np.asarray(generated2[i.state][0].path())
+                fromGoalList=reversed(fromGoalList)
+                return i.path()+list(fromGoalList)
         n1 = fringe1.pop(0)
         n2 = fringe2.pop(0)
         generated1[n1.state] = [n1, 'E']
