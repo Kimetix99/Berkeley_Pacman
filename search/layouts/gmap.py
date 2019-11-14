@@ -18,7 +18,8 @@ class RandomMap:
 		random.seed(self.seed)
 
 		pacman_pos = (random.randint(1,nr-2),random.randint(1,nc-2))
-		food_pos = (random.randint(1,nr-2),random.randint(1,nc-2))
+		#food_pos = (random.randint(1,nr-2),random.randint(1,nc-2))
+                food_pos = (nr-2,1)
 		while pacman_pos == food_pos:
 			food_pos = (random.randint(1,nr-2),random.randint(1,nc-2))
 

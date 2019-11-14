@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.10.17)  14 NOV 2019 21:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.10.17)  14 NOV 2019 23:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -826,7 +826,15 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-ABD: EveryShipout initializing macros [1
+ABD: EveryShipout initializing macros
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 50.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <20.74> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 50.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./prac1_IA.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -838,11 +846,11 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout4 = `prac1_IA.toc'.
 
  [1]
-<taula.png, id=17, 1537.745pt x 493.845pt>
+<taula.png, id=18, 1276.77pt x 469.755pt>
 File: taula.png Graphic file (type png)
 <use taula.png>
 Package pdftex.def Info: taula.png  used on input line 62.
-(pdftex.def)             Requested size: 384.99832pt x 123.64178pt.
+(pdftex.def)             Requested size: 384.99832pt x 141.65154pt.
 
 Overfull \hbox (39.99832pt too wide) in paragraph at lines 62--63
  [][] 
@@ -874,58 +882,60 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--82
  []
 
 [1 <./taula.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 85--90
+Underfull \hbox (badness 10000) in paragraph at lines 85--89
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--90
+Underfull \hbox (badness 10000) in paragraph at lines 85--89
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--90
+Underfull \hbox (badness 10000) in paragraph at lines 85--89
 
+ []
+
+
+Overfull \hbox (4.8339pt too wide) in paragraph at lines 93--94
+\OT1/cmr/m/n/10 La dist^^Rancia d'Euclides con-sis-teix a aplicar la regla de P
+it^^Ragores amb les dist^^Rancies
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 99--106
+Underfull \hbox (badness 10000) in paragraph at lines 98--106
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--106
+Underfull \hbox (badness 10000) in paragraph at lines 98--106
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--106
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 99--106
+Underfull \hbox (badness 10000) in paragraph at lines 98--106
 
  []
 
 [3] (./prac1_IA.aux) ) 
 Here is how much of TeX's memory you used:
- 13937 strings out of 494880
- 300135 string characters out of 6179600
- 360817 words of memory out of 5000000
- 16992 multiletter control sequences out of 15000+600000
- 5457 words of font info for 20 fonts, out of 8000000 for 9000
+ 13955 strings out of 494880
+ 300456 string characters out of 6179600
+ 360820 words of memory out of 5000000
+ 17007 multiletter control sequences out of 15000+600000
+ 5714 words of font info for 21 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 55i,6n,71p,451b,231s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,6n,71p,449b,231s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on prac1_IA.pdf (5 pages, 125553 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on prac1_IA.pdf (5 pages, 132965 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
- 30 compressed objects within 1 object stream
+ 48 PDF objects out of 1000 (max. 8388607)
+ 33 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 

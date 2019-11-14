@@ -38,7 +38,7 @@
                            text centered}
 }
 \renewcommand{\figurename}{Figura}
-\title{Primera pràctica d'Inteligència Artificial}
+\title{Primera pràctica d'Intel·ligència Artificial}
 \author{Joaquim Picó Mora}
 \date{Divendres 15 de Novembre}
 \assignatura{Inteligència Artificial}
@@ -66,44 +66,42 @@
 \section{Algoritmes}
 %
 \subsection{Uniform Cost Search}
-L'ucs és caracteritza per expandir sempre el node al que s'ha arribat amb el menor cost. Per a realitzar aixó he declarat la frontera com una cua per prioritat, fent així que cada cop que es tregui un element d'ella per a expandir-lo sigui el que te el cost més baix ja que la llista és trovarà ordenada per prioritat. 
+L'ucs és caracteritza per expandir sempre el node al qual s'ha arribat amb el menor cost. Per a realitzar això he declarat la frontera com una cua per prioritat, fent així que cada cop que es tregui un element d'ella per a expandir-lo sigui el que té el cost més baix, ja que la llista és trobarà ordenada per prioritat.
 \\\\
-La principal característica d'aquest algorísme i que el fa diferir del Breath First Search és que si trobem un node n1 a la frontera que té un cost determinat, i un altre node n2 el qual ens porta al mateix estat que n1 i amb menor cost. Aleshores afegirem aquest segón node  a la frontera, i la mateixa cua per prioritat fara que n2 s'expandeixí abans que n1 ja que tindrà un cost menor i per tant una major prioritat.
+La principal característica d'aquest algoritme i que el fa diferir del Breath First Search és que si trobem un node n1 a la frontera que té un cost determinat, i un altre node n2 el qual ens porta al mateix estat que n1 i amb menor cost. Aleshores afegirem aquest segon node a la frontera, i la mateixa cua per prioritat farà que n2 s'expandeixi abans que n1, ja que tindrà un cost menor i per tant una major prioritat.
 \\\\
-Aquest algoritme ens trobarà sempre el camí optim a la solució. En aquest cas però, al ser el cost lineal, l'espai d'estats finit, el factor de ramificació també finit i havent-hi solució, ens trobarà el camí optim, però executanse de forma identica a l'algoritme Breath First Search
+Aquest algoritme ens trobarà sempre el camí òptim a la solució. En aquest cas però, al ser el cost lineal, l'espai d'estats finit, el factor de ramificació també finit i havent-hi solució, ens trobarà el camí òptim, però executant-se de forma idèntica a l'algoritme Breath First Search
 \\\\
-Podem veure en la Figura1 que l'ucs de tots els algoritmes proposats és el menys eficient en quant a espai. En canvis, el temps d'execució és molt proper al de tots els altres algorismes.
+Podem veure en la Figura1 que l'ucs de tots els algoritmes proposats és el menys eficient quant a espai. En canvis, el temps d'execució és molt proper al de tots els altres algorismes.
 \subsection{Bidirectional Search}
-S'ha decidit implementar mitjançant l'algoritme bfs desde dos punts diferents. Aquests punts són el punt d'inici i el punt d'arribada i cada un d'ells tindrà fronteres i llistes de nodes expandits diferents. 
+S'ha decidit implementar mitjançant l'algoritme bfs des de dos punts diferents. Aquests punts són el punt d'inici i el punt d'arribada i cada un d'ells tindrà fronteres i llistes de nodes expandits diferents.
 \\\\
-D'aquesta forma, cada cop que afegim un element a una de les dos fronteres, comprovarem que no es trovi a la llista de generats de l'altre.
+D'aquesta forma, cada cop que afegim un element a una de les dues fronteres, comprovarem que no és trobi a la llista de generats de l'altre.
 \\\\
-Quan es generen els nodes successors  que deriven del punt d'arribada, l'acció d'aquest s'haurà de canviar per la seva antagònica, fent d'aquesta forma que al concatenar els recorreguts el que en resulta sigui vàlid. Per tal de reaprofitar la mateixa funció s'ha decidit implementar-ho amb lambda functions.
+Quan es generen els nodes successors que deriven del punt d'arribada, l'acció d'aquest s'haurà de canviar per la seva antagònica, fent d'aquesta forma que al concatenar els recorreguts el que en resulta sigui vàlid. Per tal de reaprofitar la mateixa funció s'ha decidit implementar-ho amb lambda funcions.
 \subsection{Greedy Best First Search}
-En quant al bfsh, és una aplicació de l'ucs, pero en canvis d'expandir el node amb menor cost, expandeixen aquells amb l'heurística que més prometi. Per el demés, es segueix exactament el mateix patró de diseny que l'ucs.
+Quant al bfsh, és una aplicació de l'ucs, però en canvis d'expandir el node amb menor cost, expandeixen aquells amb l'heurística que més prometi. Per la resta, se segueix exactament el mateix patró de disseny que l'ucs.
 \subsection{A*}
-De misma forma que el bfsh el algoritmo A* es una derivación del ucs, pero ahora en canvio de expandir el nodo con la mejor heurística, expandirá el que su coste sumado a su heuristica sea el más pequeño.
-De mateixa manera que el bfsh l'algoritme A* és una derivació del ucs, pero ara en canvi d'expandir el node amb la millor heurística, expandirá el que el seu cost sumat a la seva heurística sigui el mínim.
+De la mateixa manera que el bfsh l'algoritme A* és una derivació del ucs, però ara en canvi d'expandir el node amb la millor heurística, expandira el que el seu cost sumat a la seva heurística sigui el mínim.
 \\\\
-Per assegurar la concistencia d'una heuristica donada l'admissibilitat, realitzem la funció getPriority la qual ens retornarà el maxim entre l'heurística més el cost entre pare i fill.
+Per assegurar la consistència d'una heurística donada l'admissibilitat, realitzem la funció getPriority la qual ens retornarà el màxim entre l'heurística més el cost entre pare i fill.
 \\\\
 \section{Heurístiques}
 \subsection{Distancia de Manhattan}
-Aquesta heurística consisteix en agafar la distancia total entre el node i la posició en la que volem arribar. Per a realitzar-ho sumem amb valor absolut la distancia entre node i goal en l'eix x més la distancia en l'eix y. 
+Aquesta heurística consisteix a agafar la distància total entre el node i la posició en la qual volem arribar. Per a realitzar-ho sumem amb valor absolut la distancia entre node i goal en l'eix x més la distancia en l'eix y.
 \subsection{Distància d'Euclides}
-La distància d'euclides consisteix a aplicar la regla de pitagores amb les distancies x i y calculades a l'apartat anterior per obtenir la distancia en línea recta en que es troba el node de la posició goal.
+La distància d'Euclides consisteix a aplicar la regla de Pitàgores amb les distàncies x i y calculades a l'apartat anterior per obtenir la distancia en línia recta en què es troba el node de la posició goal.
 \subsection{Distancia xAxe}
-Aquesta és l'heurítica que he proposat com alternativa. Consisteix en la distancia en l'eix de les x entre el node i la posició d'arribada.
+Aquesta és l'heurística que he proposat com a alternativa. Consisteix en la distancia en l'eix de les x entre el node i la posició d'arribada.
 
 \section{Anàlisis Evaluació Experimental}
-Com podem veure, el que expandeix la menor quantitat de nodes i que per tant és el més eficient en termes d'espai és l'algoritme bfsh, aquest si existeix una solució ens la trobarà, pero no garantitza que aquesta sigui optimal. 
+Com podem veure, el que expandeix la menor quantitat de nodes i que per tant és el més eficient en termes d'espai és l'algoritme bfsh, aquest si existeix una solució ens la trobarà, però no garanteix que aquesta sigui òptima.
 \\\\
-Tots els altres algoritmes garanteixen que la solució que trobaràn serà l'optima, però es pot veure que el més eficient serà l'A* degut a que expandeix el menor nombre de nodes d'entre els algoritmes que garanteixen una solució optimal.\\
-Seguidament a l'A* s'hi trova el bds, aquest expandeix menys nodes que l'ucs, aixó és degut a que expandeix des de dos punts diferents del mapa, i per tant l'amplada de l'expansió prop del punt de trobada serà menor que si ho fés només des d'un unic punt.
+Tots els altres algoritmes garanteixen que la solució que trobaran serà l'optima, però es pot veure que el més eficient serà l'A* degut a que expandeix el menor nombre de nodes d'entre els algoritmes que garanteixen una solució òptima.\\
+Seguidament a l'A* s'hi troba el bds, aquest expandeix menys nodes que l'ucs, això és degut a que expandeix des de dos punts diferents del mapa, i per tant l'amplada de l'expansió prop del punt de trobada serà menor que si ho fes només des d'un únic punt.
 \\\\
-Finalment trobel l'ucs com l'algorisme menys eficient dels optimals degut a que expandeix mes nodes que els altres dos algoritmes.
-\\\\ 
-
-
+Finalment trobem l'ucs com l'algorisme menys eficient dels optimals, ja que expandeix més nodes que els altres dos algoritmes.
+\\\\
+Amb el que respecte a temps l'algoritme en trobar una solució més ràpid és el bfsh, però aquesta no és òptima. Per altra banda l'A* amb l'heurística de la distància de Manhattan és el més ràpid d'entre els òptimes.
 
 \end{document}

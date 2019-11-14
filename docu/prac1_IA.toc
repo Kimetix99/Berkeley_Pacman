@@ -1,7 +1,7 @@
 \contentsline {section}{\numberline {1}Taula Evaluaci\IeC {\'o} Experimental}{1}
 \contentsline {section}{\numberline {2}Algoritmes}{1}
 \contentsline {subsection}{\numberline {2.1}Uniform Cost Search}{1}
-\contentsline {subsection}{\numberline {2.2}Bidirectional Search}{1}
+\contentsline {subsection}{\numberline {2.2}Bidirectional Search}{2}
 \contentsline {subsection}{\numberline {2.3}Greedy Best First Search}{2}
 \contentsline {subsection}{\numberline {2.4}A*}{2}
 \contentsline {section}{\numberline {3}Heur\IeC {\'\i }stiques}{2}
