@@ -89,28 +89,25 @@ def uniformCostSearch(problem):
             print "No s'ha trobat solucio"
             sys.exit()
         n = fringe.pop()
-        if generated[n.state][1] != 'E':
-            if problem.isGoalState(n.state):
-                return n.path()
-            generated[n.state] = [n, 'E']
-            for state, action, cost in problem.getSuccessors(n.state):
-                ns = Node(n, action, cost, state)
-                if ns.state not in generated: 
-                    fringe.push(ns,ns.path_cost)
-                    generated[ns.state]=[ns, 'F']
-                elif ns.state in generated and generated[ns.state][1] == 'F' and ns.path_cost < generated[ns.state][0].path_cost:
-                    fringe.push(ns,ns.path_cost)
-                    generated[ns.state] = [ns, 'F']
+        if problem.isGoalState(n.state):
+            return n.path()
+        generated[n.state] = [n, 'E']
+        for state, action, cost in problem.getSuccessors(n.state):
+            ns = Node(n, action, cost, state)
+            if ns.state not in generated: 
+                fringe.push(ns,ns.path_cost)
+                generated[ns.state]=[ns, 'F']
+            elif ns.state in generated and generated[ns.state][1] == 'F' and ns.path_cost < generated[ns.state][0].path_cost:
+                fringe.update(ns,ns.path_cost)
+                generated[ns.state] = [ns, 'F']
 
 
 def manhattanHeuristic(position, problem, info={}):
-    "The Manhattan distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 def euclideanHeuristic(position, problem, info={}):
-    "The Euclidean distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
@@ -130,20 +127,22 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
             print "No s'ha trobat solucio"
             sys.exit()
         n = fringe.pop()
-        if generated[n.state][1]!='E':
-            if problem.isGoalState(n.state):
-                return n.path()
-            generated[n.state]=[n, 'E']
-            for state, action, cost in problem.getSuccessors(n.state):
-                ns=Node(n,action,cost,state)
-                if ns.state not in generated:
-                    fringe.push(ns,heuristic(n.state, problem))
-                    generated[ns.state]=[ns,'F']
-                elif ns.state in generated and generated[ns.state][1] == 'F' and heuristic(ns.state, problem) < heuristic(generated[ns.state][0].state, problem):
-                    fringe.push(ns,heuristic(ns.state, problem))
-                    generated[ns.state] = [ns, 'F']
+        if problem.isGoalState(n.state):
+            return n.path()
+        generated[n.state]=[n, 'E']
+        for state, action, cost in problem.getSuccessors(n.state):
+            ns=Node(n,action,cost,state)
+            if ns.state not in generated:
+                fringe.push(ns,heuristic(ns.state, problem))
+                generated[ns.state]=[ns,'F']
+            elif ns.state in generated and generated[ns.state][1] == 'F' and heuristic(ns.state, problem) < heuristic(generated[ns.state][0].state, problem):
+                fringe.update(ns,heuristic(ns.state, problem))
+                generated[ns.state] = [ns, 'F']
 
 def aStarSearch(problem, heuristic=nullHeuristic):
+    getPriority = lambda ns, problem: max(heuristic(ns.state, problem) + ns.path_cost,
+                                          heuristic(ns.parent.state, problem) 
+                                          + ns.parent.path_cost)
     n=Node(None,None,0,problem.getStartState())
     fringe = util.PriorityQueue()
     fringe.push(n,heuristic(n.state, problem)+n.path_cost)
@@ -153,20 +152,39 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             print "No s'ha trobat solucio"
             sys.exit()
         n = fringe.pop()
-        if generated[n.state][1]!='E':
-            if problem.isGoalState(n.state):
-                return n.path()
-            generated[n.state]=[n, 'E']
-            for state, action, cost in problem.getSuccessors(n.state):
-                ns=Node(n,action,cost,state)
-                if ns.state not in generated:
-                    fringe.push(ns,heuristic(n.state, problem)+ns.path_cost)
-                    generated[ns.state]=[ns,'F']
-                elif ns.state in generated and generated[ns.state][1] == 'F' and (ns.path_cost+heuristic(ns.state, problem)) < (generated[ns.state][0].path_cost+heuristic(generated[ns.state][0].state,problem)):
-                    fringe.push(ns,heuristic(ns.state, problem)+ns.path_cost)
-                    generated[ns.state] = [ns, 'F']
+        if problem.isGoalState(n.state):
+            return n.path()
+        generated[n.state]=[n, 'E']
+        for state, action, cost in problem.getSuccessors(n.state):
+            ns=Node(n,action,cost,state)
+            if ns.state not in generated:
+                fringe.push(ns, getPriority(ns, problem))
+                generated[ns.state]=[ns,'F']
+            elif ns.state in generated and generated[ns.state][1] == 'F' and getPriority(ns, problem) < getPriority(generated[ns.state][0], problem):
+                fringe.update(ns, getPriority(ns, problem))
+                generated[ns.state] = [ns, 'F']
 
 def bidirectionalSearch(problem):
+    def generateList1(ns, generated):
+        fromGoalList=np.asarray(generated[ns.state][0].path())
+        fromGoalList=reversed(fromGoalList)
+        return ns.path()+list(fromGoalList)
+
+    def generatedList2(ns, generated):
+        fromGoalList=np.asarray(ns.path())
+        fromGoalList=reversed(fromGoalList)
+        return generated2[ns.state][0].path() + list(fromGoalList)
+
+    def updateFringe(n1, fringe, generated1, generated2, trans, problem, generateList):
+        for state, action, cost in problem.getSuccessors(n1.state):
+            ns = Node(n1, trans(action), cost, state)
+            if ns.state not in generated1: 
+                fringe.append(ns)
+                generated1[ns.state]=[ns, 'F']
+            if ns.state in generated2:
+                return generateList(ns, generated2)
+        return None
+    
     n1=Node(None,None,0,problem.getStartState())
     n2=Node(None,None,0,problem.goal)
     fringe1=[n1]
@@ -177,25 +195,18 @@ def bidirectionalSearch(problem):
         if len(fringe1) == 0 or len(fringe2) == 0:
             print "No s'ha trobat solucio"
             sys.exit()
-        for i in fringe1:
-            if i.state in generated2:
-                fromGoalList=np.asarray(generated2[i.state][0].path())
-                fromGoalList=reversed(fromGoalList)
-                return i.path()+list(fromGoalList)
         n1 = fringe1.pop(0)
         n2 = fringe2.pop(0)
         generated1[n1.state] = [n1, 'E']
         generated2[n2.state] = [n2, 'E']
-        for state, action, cost in problem.getSuccessors(n1.state):
-            ns = Node(n1, action, cost, state)
-            if ns.state not in generated1: 
-                fringe1.append(ns)
-                generated1[ns.state]=[ns, 'F']
-        for state, action, cost in problem.getSuccessors(n2.state):
-            ns = Node(n2, anthagonicAction(action), cost, state)
-            if ns.state not in generated2: 
-                fringe2.append(ns)
-                generated2[ns.state]=[ns, 'F']
+        var = updateFringe(n1, fringe1, generated1, generated2, lambda x : x, problem, generateList1)
+        if var != None:
+            return var
+        var = updateFringe(n2, fringe2, generated2, generated1, anthagonicAction, problem, generatedList2)
+        if var != None:
+            return var
+
+
 
 def anthagonicAction(action):
     if action=='North':

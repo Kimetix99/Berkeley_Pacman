@@ -16,5 +16,5 @@ class Node:
             curr = curr.parent
         return list(reversed(path))
 
-    def equals(self,node):
+    def __eq__(self,node):
         return self.state==node.state
